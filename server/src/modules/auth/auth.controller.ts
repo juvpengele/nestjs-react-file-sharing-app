@@ -12,10 +12,11 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() userPayload: CreateUserDto) {
-    return { hello: 'world' };
     try {
       const createdUser = await this.userService.createUser(userPayload);
-      this.authService.sendRegistrationEmail(createdUser);
+      await this.authService.sendRegistrationEmail(createdUser);
+
+      return createdUser;
     } catch (error) {
       return error;
     }

@@ -10,17 +10,34 @@ import { Hash } from '../../utils/hash.utils';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(userPayload: CreateUserDto): Promise<User> {
     const createdUser = new this.userModel({
-      ...createUserDto,
-      password: await Hash.bcrypt(createUserDto.password),
+      ...userPayload,
+      password: await Hash.bcrypt(userPayload.password),
       rememberToken: Str.random(30),
       isActive: false,
     });
+
     return createdUser.save();
   }
 
-  async exists(key: string, value: string): Promise<boolean> {
-    return !! await this.userModel.findOne({ [key]: value });
+  async exists(filters: {
+    [key: string]: string | boolean | number;
+  }): Promise<boolean> {
+    return !!(await this.userModel.findOne(filters));
+  }
+
+  private async getUniqueRememberToken(): Promise<string> {
+    let rememberToken = Str.random(40);
+
+    while (
+      await this.exists({
+        rememberToken,
+      })
+    ) {
+      rememberToken = Str.random(40);
+    }
+
+    return rememberToken;
   }
 }

@@ -11,9 +11,9 @@ import {
 export class UniqueEmailRule implements ValidatorConstraintInterface {
   constructor(private readonly userService: UserService) {}
 
-  async validate(value: string): Promise<boolean> {
+  async validate(email: string): Promise<boolean> {
     try {
-      return !(await this.userService.exists('email', value));
+      return !(await this.userService.exists({ email }));
     } catch (error) {
       return false;
     }
