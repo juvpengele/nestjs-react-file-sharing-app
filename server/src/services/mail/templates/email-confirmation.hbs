@@ -333,7 +333,7 @@
     </style>
   </head>
   <body>
-    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+    
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -350,7 +350,7 @@
                     <tr>
                       <td>
                         <p>Hi {{ userName }},</p>
-                        <p>Sometimes you just want to send a simple HTML email with a simple design and clear call to action. This is it.</p>
+                        <p>We receive a registration with your email to our platform. To confirm your account, please click the button below</p>
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
@@ -366,8 +366,8 @@
                             </tr>
                           </tbody>
                         </table>
-                        <p>You can copy / paste the following url: {{ url }}</p>
-                        <p>Good luck! Hope it works.</p>
+                        <p>You can copy / paste to your browser the following url: <a href="{{ url }}">{{ url }}</a></p>
+                        <p>If you did not register to our platform, please ignore this email.</p>
                       </td>
                     </tr>
                   </table>
@@ -383,8 +383,7 @@
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                    <span class="apple-link">Company Inc, 3 Abbey Road, San Francisco CA 94102</span>
-                    <br> Don't like these emails? <a href="http://i.imgur.com/CScmqnj.gif">Unsubscribe</a>.
+                    <span class="apple-link">File Share App</span>
                   </td>
                 </tr>
                 <tr>
