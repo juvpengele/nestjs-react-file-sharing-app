@@ -1,6 +1,10 @@
 const { env } = process;
 
 export default () => ({
+  app: {
+    name: env.NAME,
+    webClientUrl: env.APP_WEB_CLIENT_BASE_URL,
+  },
   database: {
     uri: env.DATABASE_URI || '',
   },

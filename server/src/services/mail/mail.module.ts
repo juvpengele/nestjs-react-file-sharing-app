@@ -10,7 +10,7 @@ import { MailService } from './mail.service';
     MailerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const { host, secure, auth, from } = configService.get('mail');
+        const { host, secure, auth, from, port } = configService.get('mail');
 
         return {
           transport: {
@@ -20,6 +20,7 @@ import { MailService } from './mail.service';
               user: auth.user,
               pass: auth.password,
             },
+            port,
           },
           defaults: {
             from,
@@ -28,7 +29,7 @@ import { MailService } from './mail.service';
             dir: join(__dirname, 'templates'),
             adapter: new HandlebarsAdapter(),
             options: {
-              strict: true,
+              strict: false,
             },
           },
         };
