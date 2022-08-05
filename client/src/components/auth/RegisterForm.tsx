@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { authService } from "../../services/AuthService";
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name field is required'),
@@ -9,7 +10,7 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Password is required').min(8, 'Password should have at least 8 characters')
 });
 
-interface FormData {
+export interface RegisterFormData {
   name: string,
   email: string,
   password: string,
@@ -17,10 +18,18 @@ interface FormData {
 
 function RegisterForm() {
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
     resolver: yupResolver(validationSchema)
   });
-  const onSubmit: SubmitHandler<FormData> = (data: FormData) => console.log(data);
+  const onSubmit: SubmitHandler<RegisterFormData> = async (formData: RegisterFormData) => {
+
+
+    try {
+      const response = await authService.register(formData);
+    } catch (error) {
+
+    }
+  }
 
   return (
     <div className="flex-1 flex items-center h-full w-full lg:w-1/2 mx-auto">
