@@ -16,6 +16,7 @@ export class UserService {
       password: await Hash.bcrypt(userPayload.password),
       rememberToken: Str.random(30),
       isActive: false,
+      confirmedAt: null,
     });
 
     return createdUser.save();
@@ -27,14 +28,24 @@ export class UserService {
     return !!(await this.userModel.findOne(filters));
   }
 
+  async validateUser(rememberToken: string): Promise<boolean> {
+    try {
+      const response = await this.userModel.updateOne(
+        { rememberToken },
+        { rememberToken: null, isActive: true },
+      );
+
+      return !!(response.modifiedCount > 0);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
   private async getUniqueRememberToken(): Promise<string> {
     let rememberToken = Str.random(40);
 
-    while (
-      await this.exists({
-        rememberToken,
-      })
-    ) {
+    while (await this.exists({ rememberToken })) {
       rememberToken = Str.random(40);
     }
 
