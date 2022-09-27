@@ -14,7 +14,7 @@ import {
 import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from '../user/user.service';
-import { SerializeInterceptor } from '../../interceptors/serialize.interceptor';
+import { Serialize } from '../../interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 
 @Controller('auth')
@@ -24,7 +24,7 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
-  @UseInterceptors(new SerializeInterceptor(UserDto))
+  @Serialize(UserDto)
   @Post('register')
   async register(@Body() userPayload: CreateUserDto) {
     try {
