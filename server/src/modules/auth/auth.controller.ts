@@ -14,8 +14,8 @@ import {
 import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from '../user/user.service';
-import { plainToInstance } from 'class-transformer';
-import { User } from 'src/entities/user.entity';
+import { SerializeInterceptor } from '../../interceptors/serialize.interceptor';
+import { UserDto } from './dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,14 +24,17 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(new SerializeInterceptor(UserDto))
   @Post('register')
   async register(@Body() userPayload: CreateUserDto) {
     try {
-      const createdUser = await this.userService.createUser(userPayload);
-      await this.authService.sendRegistrationEmail(createdUser);
+      const createdUser = await this.userService.fetchOne({
+        email: 'philippe.fruchet@example.com',
+      });
+      // const createdUser = await this.userService.createUser(userPayload);
+      // await this.authService.sendRegistrationEmail(createdUser);
 
-      return plainToInstance(User, createdUser.toObject());
+      return createdUser.toObject({ getters: true });
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

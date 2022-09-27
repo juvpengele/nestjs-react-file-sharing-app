@@ -26,7 +26,7 @@ export class UserService {
       password: await Hash.bcrypt(userPayload.password),
       rememberToken: await this.getUniqueRememberToken(),
       isActive: false,
-      confirmedAt: null,
+      created: new Date(),
     });
 
     return createdUser.save();
