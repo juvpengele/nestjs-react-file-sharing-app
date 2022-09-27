@@ -27,16 +27,15 @@ export class AuthService {
     });
   }
 
-  async validateUser(rememberToken: string): Promise<boolean> {
+  async validateUserAccount(rememberToken: string): Promise<boolean> {
     try {
-      const isValid = await this.userService.exists({ rememberToken });
-      if (!isValid) {
-        return false;
-      }
+      const userExists = await this.userService.exists({ rememberToken });
 
-      return await this.userService.validateUser(rememberToken);
+      return userExists
+        ? await this.userService.validateUser(rememberToken)
+        : false;
     } catch (error) {
-      return false;
+      throw error;
     }
   }
 }
